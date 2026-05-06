@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "Alert.apps.AlertConfig",
+    "EnviroProRecord",
 ]
 
 MIDDLEWARE = [
@@ -50,7 +51,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "nombre_proyecto.urls"
+
+ROOT_URLCONF = "AgroDataLab.urls"
+
 
 TEMPLATES = [
     {
@@ -67,7 +70,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "nombre_proyecto.wsgi.application"
+
+WSGI_APPLICATION = "AgroDataLab.wsgi.application"
 
 
 # Database
@@ -103,7 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+
+LANGUAGE_CODE = "es-es"
+
 
 TIME_ZONE = "UTC"
 
