@@ -1,0 +1,61 @@
+# =========================
+# Python / Archivos compilados
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+
+# =========================
+# Entornos Virtuales
+# =========================
+.venv_AgrodataLab/
+env/
+.venv/
+ENV/
+*.egg-info/
+
+# =========================
+# Django
+# =========================
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# =========================
+# Archivos subidos por usuarios (Media)
+# =========================
+# No debes subir los archivos que suben los usuarios durante las pruebas
+media/
+
+# =========================
+# Archivos estáticos recolectados
+# =========================
+# Carpeta donde se agrupan los estáticos al hacer collectstatic (producción)
+staticfiles/
+static_root/
+
+# =========================
+# Secretos y Variables de Entorno
+# =========================
+# ¡CRÍTICO! Nunca subas tus contraseñas, claves API o SECRET_KEY
+.env
+.env.local
+.env.*
+
+# =========================
+# Editores de código (IDEs)
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# Sistemas Operativos
+# =========================
+.DS_Store
+Thumbs.db
