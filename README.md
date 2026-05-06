@@ -1,3 +1,3 @@
-git switch -c EnviroProRecord
-git switch -c Alert
-git switch -c Recommendation
+git switch EnviroProRecord
+git switch Alert
+git switch Recommendation
