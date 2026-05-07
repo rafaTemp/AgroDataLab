@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Eliminar Alerta</h2>
+<p>¿Estás seguro de que deseas eliminar la alerta del <strong>{{ object.fecha }}</strong> de tipo <strong>{{ object.tipo_de_alerta }}</strong>?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" style="color: red;">Confirmar Eliminación</button>
+    <a href="{% url 'alert_list' %}">Cancelar</a>
+</form>
+{% endblock %}
