@@ -6,7 +6,6 @@ tipo_de_alerta_choices = [
 class Alert(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, verbose_name="Fecha")
     tipo_de_alerta = models.CharField(max_length=100, verbose_name="Tipo de alerta", choices=tipo_de_alerta_choices)
-    nivel = models.CharField(max_length=50, verbose_name="Nivel")
     descripcion = models.TextField(verbose_name="Descripción")
     variable_afectada = models.CharField(max_length=100, verbose_name="Variable afectada")
 
