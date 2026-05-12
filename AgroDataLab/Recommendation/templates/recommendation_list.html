@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Listado de Recomendaciones</h2>
+<a href="{% url 'recommendation_create' %}" class="btn">Nueva Recomendación</a>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Alerta Relacionada</th>
+            <th>Prioridad</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for recomendacion in recomendaciones %}
+        <tr>
+            <td>{{ recomendacion.titulo }}</td>
+            <td>{{ recomendacion.alerta }}</td>
+            <td>{{ recomendacion.prioridad }}</td>
+            <td>{{ recomendacion.estado }}</td>
+            <td>
+                <a href="{% url 'recommendation_update' recomendacion.id %}">Editar</a>
+                <a href="{% url 'recommendation_delete' recomendacion.id %}">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No hay recomendaciones registradas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

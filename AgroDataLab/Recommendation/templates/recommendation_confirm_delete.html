@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Eliminar Recomendación</h2>
+<p>¿Estás seguro de que deseas eliminar la recomendación <strong>{{ object.titulo }}</strong>?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" style="color: red;">Confirmar Eliminación</button>
+    <a href="{% url 'recommendation_list' %}">Cancelar</a>
+</form>
+{% endblock %}

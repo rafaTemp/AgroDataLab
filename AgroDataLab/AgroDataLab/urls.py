@@ -5,4 +5,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('enviro/', include('EnviroProRecord.urls')),
     path('alerta/', include('Alert.urls')),
+    path('recomendacion/', include('Recommendation.urls')),
 ]
