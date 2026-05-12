@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "Alert.apps.AlertConfig",
+    "Recommendation.apps.RecommendationConfig",
     "EnviroProRecord",
 ]
 

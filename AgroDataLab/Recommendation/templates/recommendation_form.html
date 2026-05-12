@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{% if object %}Editar{% else %}Nueva{% endif %} Recomendación</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar Recomendación</button>
+    <a href="{% url 'recommendation_list' %}">Cancelar</a>
+</form>
+{% endblock %}
