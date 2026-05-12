@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "Core.apps.CoreConfig",
     "Alert.apps.AlertConfig",
     "Recommendation.apps.RecommendationConfig",
     "EnviroProRecord",
@@ -59,7 +60,7 @@ ROOT_URLCONF = "AgroDataLab.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / 'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
