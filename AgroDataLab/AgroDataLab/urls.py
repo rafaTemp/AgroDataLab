@@ -4,6 +4,8 @@ from Core import views as core_views
 
 urlpatterns = [
     path('', core_views.inicio, name='inicio'),
+    path('registro/', core_views.register, name='register'),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('enviro/', include('EnviroProRecord.urls')),
     path('alerta/', include('Alert.urls')),
