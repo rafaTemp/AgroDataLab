@@ -60,3 +60,9 @@ static_root/
 # =========================
 .DS_Store
 Thumbs.db
+
+# Base de datos local (SQLite)
+AgroDataLab.db
+# Carpeta de migraciones
+**/migrations/*
+!**/migrations/__init__.py
