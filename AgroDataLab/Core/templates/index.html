@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="p-5 bg-white rounded shadow-sm">
+    <h1 class="mb-3">AgroDataLab EnviroPro</h1>
+    <p class="lead">
+        Aplicación web para consultar datos de sensores agrícolas, revisar indicadores,
+        detectar alertas y gestionar recomendaciones.
+    </p>
+
+    <div class="mt-4">
+        <a href="{% url 'dashboard' %}" class="btn btn-success">Ir al panel principal</a>
+        <a href="{% url 'about' %}" class="btn btn-outline-success">Acerca del proyecto</a>
+    </div>
+</div>
+
+{% endblock %}
