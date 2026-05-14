@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="mb-4">Panel principal</h1>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-success">
+            <div class="card-body">
+                <h5 class="card-title">Registros EnviroPro</h5>
+                <p class="card-text">Carga el CSV de EnviroPro para generar gráficos, alertas y recomendaciones.</p>
+                <a href="{% url 'importar_csv' %}" class="btn btn-success">Importar CSV</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-warning">
+            <div class="card-body">
+                <h5 class="card-title">Alertas</h5>
+                <p class="card-text">Revisa avisos generados a partir de los datos.</p>
+                <a href="{% url 'alert_list' %}" class="btn btn-warning">Ver alertas</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-info">
+            <div class="card-body">
+                <h5 class="card-title">Recomendaciones</h5>
+                <p class="card-text">Consulta propuestas de actuación agrícola.</p>
+                <a href="/recomendacion/" class="btn btn-info">Ver recomendaciones</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
