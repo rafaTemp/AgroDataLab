@@ -1,35 +1,189 @@
+
 {% extends "base.html" %}
+
+{% block messages %}
+<!-- Los mensajes se manejan mediante Toasts (Popups) en esta página -->
+{% endblock %}
+
 {% block content %}
 
-<h1 class="mb-4">Importar CSV EnviroPro</h1>
+<!-- Toast Notification Container -->
+<div id="toast-container" class="fixed top-5 right-5 z-[100] flex flex-col gap-3 pointer-events-none"></div>
 
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-            {{ message }}
+<header class="mb-8">
+    <h1 class="text-3xl font-bold tracking-tight text-slate-900">Importar CSV EnviroPro</h1>
+    <p class="mt-2 text-sm text-slate-500">Sube el archivo exportado de tus sensores para procesar los indicadores de humedad y temperatura.</p>
+</header>
+
+<div class="max-w-2xl">
+    <div class="overflow-hidden bg-white border border-slate-200 rounded-xl shadow-sm">
+        <div class="p-6">
+            <form id="upload-form" method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-slate-700">Archivo CSV</label>
+                    <div id="drop-zone" class="mt-1 flex justify-center rounded-lg border-2 border-dashed border-slate-300 px-6 py-10 transition-colors hover:border-emerald-400">
+                        <div class="text-center">
+                            <svg class="mx-auto h-12 w-12 text-slate-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 00-5.98 6.496A5.25 5.25 0 006.75 20.25H18a4.5 4.5 0 003.858-6.8 4.497 4.497 0 00-4.518-3.45 5.25 5.25 0 00-10.5 0 6 6 0 00-5.98-6.496zM12 11.25a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0V12a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+                            </svg>
+                            <div class="mt-4 flex text-sm leading-6 text-slate-600 justify-center">
+                                <label for="id_archivo_csv" class="relative cursor-pointer rounded-md bg-white font-semibold text-emerald-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-emerald-600 focus-within:ring-offset-2 hover:text-emerald-500">
+                                    <span id="file-label-text">Selecciona un archivo</span>
+                                    <input type="file" name="archivo_csv" id="id_archivo_csv" class="sr-only">
+                                </label>
+                            </div>
+                            <p class="text-xs leading-5 text-slate-500 italic">Sube el CSV original de EnviroPro (.csv)</p>
+                            <p id="selected-file-name" class="mt-2 text-sm font-medium text-emerald-600 hidden"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full inline-flex justify-center rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 transition-all active:scale-95">
+                        Procesar y Cargar Datos
+                    </button>
+                </div>
+            </form>
         </div>
-    {% endfor %}
-{% endif %}
-
-<div class="card shadow-sm">
-    <div class="card-body">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-
-            <button type="submit" class="btn btn-success">
-                Cargar CSV
-            </button>
-        </form>
     </div>
+
+    {% if request.session.csv_filas %}
+        <div class="mt-6 rounded-lg bg-blue-50 p-4 border border-blue-100 flex items-start">
+            <svg class="h-5 w-5 text-blue-400 mr-3 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+            </svg>
+            <div>
+                <p class="text-sm font-medium text-blue-800">Resumen de última carga</p>
+                <p class="text-xs text-blue-600 mt-1">
+                    {{ request.session.csv_filas }} filas y {{ request.session.csv_columnas|length }} columnas procesadas correctamente.
+                </p>
+            </div>
+        </div>
+    {% endif %}
 </div>
 
-{% if request.session.csv_filas %}
-    <div class="mt-4 alert alert-info">
-        Último CSV cargado:
-        {{ request.session.csv_filas }} filas y
-        {{ request.session.csv_columnas|length }} columnas.
-    </div>
-{% endif %}
+<script>
+    // Sistema de Toasts mejorado para soportar tipos (error, success, info)
+    function showToast(message, type = 'error') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        
+        let borderClass = 'border-rose-500';
+        let iconBg = 'bg-rose-100';
+        let iconColor = 'text-rose-500';
+        let iconSvg = '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>';
+
+        if (type === 'success' || type.includes('success')) {
+            borderClass = 'border-emerald-500';
+            iconBg = 'bg-emerald-100';
+            iconColor = 'text-emerald-500';
+            iconSvg = '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>';
+        } else if (type === 'info' || type.includes('info')) {
+            borderClass = 'border-sky-500';
+            iconBg = 'bg-sky-100';
+            iconColor = 'text-sky-500';
+            iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+        }
+
+        toast.className = `pointer-events-auto flex items-center w-full max-w-xs p-4 text-slate-500 bg-white rounded-2xl shadow-xl border-l-4 transform transition-all duration-300 translate-x-full opacity-0 ${borderClass}`;
+        
+        toast.innerHTML = `
+            <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 ${iconColor} ${iconBg} rounded-lg">${iconSvg}</div>
+            <div class="ml-3 text-sm font-bold text-slate-800">${message}</div>
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-slate-400 hover:text-slate-900 rounded-lg focus:ring-2 focus:ring-slate-300 p-1.5 hover:bg-slate-100 inline-flex h-8 w-8" onclick="this.parentElement.remove()">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        `;
+
+        container.appendChild(toast);
+        
+        // Trigger animation
+        setTimeout(() => {
+            toast.classList.remove('translate-x-full', 'opacity-0');
+        }, 10);
+
+        // Auto remove
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }, 5000);
+    }
+
+    const form = document.getElementById('upload-form');
+    const fileInput = document.getElementById('id_archivo_csv');
+    const fileNameDisplay = document.getElementById('selected-file-name');
+    const dropZone = document.getElementById('drop-zone');
+
+    fileInput.onchange = () => {
+        if (fileInput.files.length > 0) {
+            fileNameDisplay.textContent = `Archivo seleccionado: ${fileInput.files[0].name}`;
+            fileNameDisplay.classList.remove('hidden');
+            dropZone.classList.add('border-emerald-400', 'bg-emerald-50/30');
+        }
+    };
+
+    function triggerErrorVisuals() {
+        dropZone.classList.add('border-rose-400', 'bg-rose-50/30');
+        setTimeout(() => {
+            dropZone.classList.remove('border-rose-400', 'bg-rose-50/30');
+        }, 2000);
+    }
+
+    form.onsubmit = (e) => {
+        const file = fileInput.files[0];
+        
+        // 1. Validar que exista un archivo
+        if (!file) {
+            e.preventDefault();
+            showToast('¡Error! No has seleccionado ningún archivo.', 'error');
+            triggerErrorVisuals();
+            return false;
+        }
+
+        // 2. Validar extensión (.csv)
+        const fileName = file.name.toLowerCase();
+        if (!fileName.endsWith('.csv')) {
+            e.preventDefault();
+            showToast('¡Formato incorrecto! Solo se permiten archivos .csv', 'error');
+            triggerErrorVisuals();
+            return false;
+        }
+
+        // 3. Validar tamaño (no vacío)
+        if (file.size === 0) {
+            e.preventDefault();
+            showToast('¡Archivo vacío! El CSV no contiene datos.', 'error');
+            triggerErrorVisuals();
+            return false;
+        }
+
+        // Si todo está bien, mostramos un toast de "Procesando..."
+        showToast('Procesando datos... Espere un momento.', 'info');
+    };
+
+    // Handle Django messages as toasts
+    {% if messages %}
+        window.onload = () => {
+            {% for message in messages %}
+                showToast("{{ message }}", "{{ message.tags }}");
+            {% endfor %}
+        }
+    {% endif %}
+</script>
+
+<style>
+    /* Estilo adicional para que el dropzone sea interactivo */
+    #drop-zone.drag-over {
+        border-color: #10b981;
+        background-color: rgba(16, 185, 129, 0.05);
+    }
+    input[type="file"] {
+        display: none;
+    }
+</style>
 
 {% endblock %}

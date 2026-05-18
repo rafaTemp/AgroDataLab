@@ -127,5 +127,5 @@ STATIC_URL = "static/"
 
 # Authentication settings
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'inicio'
+LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'

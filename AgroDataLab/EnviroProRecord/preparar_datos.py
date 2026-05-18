@@ -27,9 +27,17 @@ def preparar_dataset_para_modelo(df_raw: pd.DataFrame) -> pd.DataFrame:
 
     df = df_raw.copy()
 
-    # Renombrar fecha si viene como Unnamed: 0
-    if 'Unnamed: 0' in df.columns and 'Fecha_Hora' not in df.columns:
-        df = df.rename(columns={'Unnamed: 0': 'Fecha_Hora'})
+    # Asegurar que tenemos una columna Fecha_Hora
+    if 'Fecha_Hora' not in df.columns:
+        # Si la primera columna se llama 'Unnamed: 0', 'Fecha', 'Date', etc., renombrarla
+        posibles_nombres = ['Unnamed: 0', 'Fecha', 'Date', 'fecha', 'date', 'Fecha / Hora']
+        for nombre in posibles_nombres:
+            if nombre in df.columns:
+                df = df.rename(columns={nombre: 'Fecha_Hora'})
+                break
+        else:
+            # Si no encontramos ninguno conocido, intentamos con la primera columna
+            df = df.rename(columns={df.columns[0]: 'Fecha_Hora'})
 
     # Eliminar posibles filas descriptivas
     df = df[df['Fecha_Hora'] != 'Fecha / Hora'].copy()
@@ -37,13 +45,19 @@ def preparar_dataset_para_modelo(df_raw: pd.DataFrame) -> pd.DataFrame:
     # Convertir fecha
     df['Fecha_Hora'] = pd.to_datetime(df['Fecha_Hora'], errors='coerce')
 
-    # Convertir columnas numéricas
+    # Convertir columnas numéricas, manejando posible coma decimal
     for col in df.columns:
         if col != 'Fecha_Hora':
+            if df[col].dtype == object:
+                # Reemplazar coma por punto para poder convertir a numérico
+                df[col] = df[col].astype(str).str.replace(',', '.')
             df[col] = pd.to_numeric(df[col], errors='coerce')
 
     # Eliminar filas sin fecha
     df = df.dropna(subset=['Fecha_Hora'])
+
+    if df.empty:
+        raise ValueError("No hay datos válidos tras procesar las fechas. Revisa el formato del CSV.")
 
     # Ordenar
     df = df.sort_values('Fecha_Hora').reset_index(drop=True)
@@ -61,10 +75,19 @@ def preparar_dataset_para_modelo(df_raw: pd.DataFrame) -> pd.DataFrame:
     ]
 
     if len(columnas_humedad) == 0:
-        raise ValueError("No se encontraron columnas de humedad.")
+        raise ValueError("Error de formato: No se han encontrado columnas de 'Sensor de humedad [%]' en el archivo.")
 
     if len(columnas_temperatura) == 0:
-        raise ValueError("No se encontraron columnas de temperatura.")
+        raise ValueError("Error de formato: No se han encontrado columnas de 'Sensor de temperatura [ºC]' en el archivo.")
+
+    # Buscar batería y panel de forma robusta
+    col_bateria = next((c for c in df.columns if 'bater' in c.lower()), None)
+    col_panel = next((c for c in df.columns if 'panel' in c.lower()), None)
+
+    if not col_bateria:
+        raise ValueError("Error de formato: No se encuentra la columna de nivel de batería.")
+    if not col_panel:
+        raise ValueError("Error de formato: No se encuentra la columna de carga del panel solar.")
 
     # Crear dataset unificado horario
     df_modelo = pd.DataFrame({
@@ -78,8 +101,8 @@ def preparar_dataset_para_modelo(df_raw: pd.DataFrame) -> pd.DataFrame:
         'Temperatura_Max': df[columnas_temperatura].max(axis=1),
         'Temperatura_Min': df[columnas_temperatura].min(axis=1),
 
-        'Bateria_mV': df['Batería [mV]'],
-        'Panel_Solar_mV': df['Panel solar [mV]']
+        'Bateria_mV': df[col_bateria],
+        'Panel_Solar_mV': df[col_panel]
     })
 
     df_modelo = df_modelo.sort_values('Fecha_Hora').reset_index(drop=True)
