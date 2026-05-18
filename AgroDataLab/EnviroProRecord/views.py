@@ -24,23 +24,8 @@ def importar_csv(request):
             archivo = request.FILES["archivo_csv"]
 
             try:
-                # Intentar varias codificaciones
-                encodings = ["utf-8", "latin-1", "cp1252"]
-                df = None
-                error_last = None
-
-                for enc in encodings:
-                    try:
-                        archivo.seek(0)
-                        archivo_texto = io.TextIOWrapper(archivo.file, encoding=enc)
-                        df = pd.read_csv(archivo_texto, sep=None, engine="python")
-                        break
-                    except (UnicodeDecodeError, pd.errors.ParserError) as e:
-                        error_last = e
-                        continue
-
-                if df is None:
-                    raise error_last
+                archivo_texto = io.TextIOWrapper(archivo.file, encoding="utf-8")
+                df = pd.read_csv(archivo_texto, sep=None, engine="python")
 
                 modelo_seleccionado = form.cleaned_data["modelo"]
                 df_resultado = predecir_humedad_baja(df, modelo_seleccionado)
@@ -72,8 +57,6 @@ def importar_csv(request):
 
             except Exception as e:
                 messages.error(request, f"Error al leer el CSV: {e}")
-        else:
-            messages.error(request, "¡Ups! No has seleccionado ningún archivo. Por favor, elige un archivo CSV válido.")
 
     else:
         form = CSVUploadForm()

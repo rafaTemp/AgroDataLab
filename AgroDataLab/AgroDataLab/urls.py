@@ -3,7 +3,7 @@ from django.urls import path, include
 from Core import views as core_views
 
 urlpatterns = [
-    path('', core_views.dashboard, name='dashboard'),
+    path('', core_views.inicio, name='inicio'),
     path('registro/', core_views.register, name='register'),
     path('acerca/', core_views.about, name='about'),
     path('accounts/', include('django.contrib.auth.urls')),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('enviro/', include('EnviroProRecord.urls')),
     path('alerta/', include('Alert.urls')),
     path('recomendacion/', include('Recommendation.urls')),
+    path('dashboard/', core_views.dashboard, name='dashboard'),
 ]

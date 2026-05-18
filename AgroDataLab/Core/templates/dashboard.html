@@ -1,58 +1,36 @@
-
 {% extends "base.html" %}
 {% block content %}
 
-<header class="mb-8">
-    <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Panel principal</h1>
-    <p class="mt-2 text-sm text-slate-500 font-medium">Gestiona tus datos agrícolas, alertas y recomendaciones desde un solo lugar.</p>
-</header>
+<h1 class="mb-4">Panel principal</h1>
 
-<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-    <!-- Card 1 -->
-    <div class="card-minimal flex flex-col overflow-hidden rounded-2xl p-6 transition-all hover:scale-[1.01] hover:shadow-lg">
-        <div class="flex-1">
-            <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
-                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-success">
+            <div class="card-body">
+                <h5 class="card-title">Registros EnviroPro</h5>
+                <p class="card-text">Carga el CSV de EnviroPro para generar gráficos, alertas y recomendaciones.</p>
+                <a href="{% url 'importar_csv' %}" class="btn btn-success">Importar CSV</a>
             </div>
-            <h3 class="text-lg font-bold text-slate-900">Registros EnviroPro</h3>
-            <p class="mt-2 text-sm text-slate-600 leading-relaxed font-medium">Analiza tus archivos CSV de sensores para generar indicadores detallados de humedad y temperatura.</p>
-        </div>
-        <div class="mt-6">
-            <a href="{% url 'importar_csv' %}" class="inline-flex w-full justify-center rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-md shadow-emerald-100 hover:bg-emerald-700 transition-all">
-                Importar CSV
-            </a>
         </div>
     </div>
 
-    <!-- Card 2 -->
-    <div class="card-minimal flex flex-col overflow-hidden rounded-2xl p-6 transition-all hover:scale-[1.01] hover:shadow-lg">
-        <div class="flex-1">
-            <div class="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center mb-4">
-                <svg class="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-warning">
+            <div class="card-body">
+                <h5 class="card-title">Alertas</h5>
+                <p class="card-text">Revisa avisos generados a partir de los datos.</p>
+                <a href="{% url 'alert_list' %}" class="btn btn-warning">Ver alertas</a>
             </div>
-            <h3 class="text-lg font-bold text-slate-900">Historial de Alertas</h3>
-            <p class="mt-2 text-sm text-slate-600 leading-relaxed font-medium">Consulta los avisos críticos detectados en el suelo y toma medidas preventivas a tiempo.</p>
-        </div>
-        <div class="mt-6">
-            <a href="{% url 'alert_list' %}" class="inline-flex w-full justify-center rounded-xl bg-slate-800 px-4 py-3 text-sm font-bold text-white shadow-md shadow-slate-100 hover:bg-slate-900 transition-all">
-                Ver alertas
-            </a>
         </div>
     </div>
 
-    <!-- Card 3 -->
-    <div class="card-minimal flex flex-col overflow-hidden rounded-2xl p-6 transition-all hover:scale-[1.01] hover:shadow-lg">
-        <div class="flex-1">
-            <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center mb-4">
-                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-info">
+            <div class="card-body">
+                <h5 class="card-title">Recomendaciones</h5>
+                <p class="card-text">Consulta propuestas de actuación agrícola.</p>
+                <a href="/recomendacion/" class="btn btn-info">Ver recomendaciones</a>
             </div>
-            <h3 class="text-lg font-bold text-slate-900">Recomendaciones</h3>
-            <p class="mt-2 text-sm text-slate-600 leading-relaxed font-medium">Accede a propuestas agronómicas personalizadas según los datos reales de tus cultivos.</p>
-        </div>
-        <div class="mt-6">
-            <a href="{% url 'recommendation_list' %}" class="inline-flex w-full justify-center rounded-xl bg-white border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition-all">
-                Ver recomendaciones
-            </a>
         </div>
     </div>
 </div>
