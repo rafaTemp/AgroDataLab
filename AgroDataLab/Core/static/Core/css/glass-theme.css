@@ -1,0 +1,119 @@
+
+:root {
+    --glass-bg: rgba(0, 0, 0, 0.4); /* Fondo más oscuro para contraste */
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    --text-color: #ffffff;
+    --accent-color: #00ff88;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    /* Fondo degradado más intenso y oscuro para que resalten las letras blancas */
+    background: linear-gradient(-45deg, #0a0f1a, #1a2a44, #103040, #051020);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text-color);
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+h1, h2, h3, h4, h5, h6, .lead, p {
+    color: white !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.navbar {
+    background: rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-radius: 15px !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-shadow);
+    color: white !important;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-bottom: 1px solid var(--glass-border) !important;
+    border-radius: 15px 15px 0 0 !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.table {
+    color: white !important;
+}
+
+.table thead th {
+    border-bottom: 2px solid var(--glass-border) !important;
+    color: var(--accent-color) !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+    color: white !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.btn-success {
+    background: linear-gradient(45deg, #00b09b, #96c93d) !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    color: white !important;
+    font-weight: bold;
+}
+
+.btn-outline-light {
+    border: 1px solid rgba(255,255,255,0.5) !important;
+}
+
+.btn-outline-light:hover {
+    background: rgba(255,255,255,0.2) !important;
+    color: white !important;
+}
+
+/* Skeleton Loader */
+.skeleton {
+    background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 4px;
+    height: 100%;
+    width: 100%;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-container {
+    height: 250px;
+    width: 100%;
+    display: block;
+}
+
+.chart-container {
+    opacity: 0;
+    transition: opacity 0.8s ease-in;
+}
+
+.chart-container.loaded {
+    opacity: 1;
+}

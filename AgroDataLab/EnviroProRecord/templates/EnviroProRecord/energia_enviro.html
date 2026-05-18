@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="mb-4">Batería y panel solar</h1>
+
+<div class="mb-3">
+    <a href="{% url 'resultado_enviro' %}" class="btn btn-outline-success">
+        Volver a resultados
+    </a>
+    <a href="{% url 'importar_csv' %}" class="btn btn-success">
+        Importar nuevo CSV
+    </a>
+</div>
+
+<div class="alert alert-info">
+    Registros analizados: {{ total_registros }}
+</div>
+
+<div class="alert alert-warning">
+    Alertas energéticas detectadas: {{ total_alertas_energia }}
+</div>
+
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning">Batería</div>
+            <div class="card-body">
+                <canvas id="bateriaCompleta"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info">Panel solar</div>
+            <div class="card-body">
+                <canvas id="panelCompleto"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 class="mb-3">Promedios por mes</h3>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning">Batería mensual</div>
+            <div class="card-body">
+                <canvas id="bateriaMensual"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info">Panel solar mensual</div>
+            <div class="card-body">
+                <canvas id="panelMensual"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 class="mb-3">Promedios por año</h3>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning">Batería anual</div>
+            <div class="card-body">
+                <canvas id="bateriaAnual"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info">Panel solar anual</div>
+            <div class="card-body">
+                <canvas id="panelAnual"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if alertas_energia %}
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-warning">
+        Alertas detectadas automáticamente
+    </div>
+
+
+
+<h3 class="mb-3">Evolución completa</h3>
+
+    <div class="card-body table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Nivel</th>
+                    <th>Descripción</th>
+                    <th>Recomendación</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alerta in alertas_energia %}
+                <tr>
+                    <td>{{ alerta.fecha }}</td>
+                    <td>{{ alerta.tipo }}</td>
+                    <td>{{ alerta.nivel }}</td>
+                    <td>{{ alerta.descripcion }}</td>
+                    <td>{{ alerta.recomendacion }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const fechas = {{ fechas|safe }};
+    const bateria = {{ bateria|safe }};
+    const panelSolar = {{ panel_solar|safe }};
+
+    const meses = {{ meses|safe }};
+    const bateriaMensual = {{ bateria_mensual|safe }};
+    const panelSolarMensual = {{ panel_solar_mensual|safe }};
+
+    const anios = {{ anios|safe }};
+    const bateriaAnual = {{ bateria_anual|safe }};
+    const panelSolarAnual = {{ panel_solar_anual|safe }};
+
+    function crearGrafica(id, labels, datos, etiqueta, tipo = 'line') {
+        new Chart(document.getElementById(id), {
+            type: tipo,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: etiqueta,
+                    data: datos,
+                    borderWidth: 2,
+                    tension: 0.3
+                }]
+            }
+        });
+    }
+
+    crearGrafica('bateriaCompleta', fechas, bateria, 'Batería (mV)');
+    crearGrafica('panelCompleto', fechas, panelSolar, 'Panel solar (mV)');
+
+    crearGrafica('bateriaMensual', meses, bateriaMensual, 'Batería media mensual (mV)', 'bar');
+    crearGrafica('panelMensual', meses, panelSolarMensual, 'Panel solar medio mensual (mV)', 'bar');
+
+    crearGrafica('bateriaAnual', anios, bateriaAnual, 'Batería media anual (mV)', 'bar');
+    crearGrafica('panelAnual', anios, panelSolarAnual, 'Panel solar medio anual (mV)', 'bar');
+</script>
+
+{% endblock %}

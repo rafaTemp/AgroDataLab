@@ -2,6 +2,9 @@ from django.db import models
 tipo_de_alerta_choices = [
     ("Humedad_alta", "Humedad alta en el suelo"),
     ("Humedad_baja", "Humedad baja en el suelo"),
+    ("Bateria_critica", "Batería crítica"),
+    ("Caida_bateria", "Caída brusca de batería"),
+    ("Panel_sin_carga", "Panel solar sin carga y batería baja"),
 ]
 class Alert(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, verbose_name="Fecha")
