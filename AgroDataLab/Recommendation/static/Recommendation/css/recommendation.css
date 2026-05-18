@@ -1,0 +1,11 @@
+
+/* Recommendation app specific styles */
+.recommendation-priority-high {
+    border-left: 4px solid #dc3545;
+}
+.recommendation-priority-medium {
+    border-left: 4px solid #ffc107;
+}
+.recommendation-priority-low {
+    border-left: 4px solid #28a745;
+}

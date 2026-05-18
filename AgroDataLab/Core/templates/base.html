@@ -1,19 +1,61 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <title>AgroDataLab Web</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroDataLab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Gris casi blanco para máxima limpieza en el contenido */
+        }
+        .liquid-glass-nav {
+            background: rgba(209, 250, 229, 0.8); /* Verde pastel más marcado */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .liquid-glass-footer {
+            background: rgba(224, 242, 254, 0.8); /* Azul pastel más marcado */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(14, 165, 233, 0.2);
+        }
+        .card-minimal {
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 
-<body class="bg-light">
-    {% include "navbar.html" %}
+<body class="h-full text-slate-800">
+    <div class="min-h-full flex flex-col">
+        {% include "navbar.html" %}
 
-    <main class="container mt-4 mb-5">
-        {% block content %}
-        {% endblock %}
-    </main>
+        <main class="flex-grow py-10">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                {% block messages %}
+                {% if messages %}
+                    <div class="mb-8">
+                        {% for message in messages %}
+                            <div class="rounded-xl p-4 border {% if message.tags == 'success' %}bg-emerald-50 text-emerald-800 border-emerald-200{% else %}bg-rose-50 text-rose-800 border-rose-200{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% endblock %}
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                {% block content %}
+                {% endblock %}
+            </div>
+        </main>
+
+        {% include "footer.html" %}
+    </div>
 </body>
 </html>
