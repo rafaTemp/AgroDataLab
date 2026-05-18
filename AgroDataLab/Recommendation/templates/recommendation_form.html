@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'Recommendation/css/recommendation.css' %}">
+{% endblock %}
 {% block content %}
 <h2>{% if object %}Editar{% else %}Nueva{% endif %} Recomendación</h2>
 
