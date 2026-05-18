@@ -7,10 +7,18 @@
     <a href="{% url 'importar_csv' %}" class="btn btn-success">
         Importar nuevo CSV
     </a>
+
+    <a href="{% url 'energia_enviro' %}" class="btn btn-outline-warning">
+        Ver batería y panel solar
+    </a>
 </div>
 
 <div class="alert alert-success">
     CSV procesado correctamente. Registros analizados: {{ total_registros }}
+</div>
+
+<div class="alert alert-secondary">
+    Modelo utilizado: <strong>{{ modelo_usado }}</strong>
 </div>
 
 <h3 class="mb-3">Gráficas por mes</h3>

@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Listado de Recomendaciones</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Listado de Recomendaciones</h2>
+
+    <a href="{% url 'resultado_enviro' %}" class="btn btn-success">
+        Volver a resultados EnviroPro
+    </a>
+</div>
 <a href="{% url 'recommendation_create' %}" class="btn">Nueva Recomendación</a>
 
 <table border="1">
