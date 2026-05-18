@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-&enl+(hy6d7ba1h8ld_t_s&yo3=nz=9+=$v6#!cuefmlre=82&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["agrodatalab.alwaysdata.net", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -137,6 +137,6 @@ STORAGES = {
 }
 
 # Authentication settings
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "dashboard"
+LOGOUT_REDIRECT_URL = "login"
