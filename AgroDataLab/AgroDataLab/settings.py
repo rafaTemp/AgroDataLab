@@ -129,3 +129,8 @@ STATIC_URL = "static/"
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'inicio'
 LOGOUT_REDIRECT_URL = 'login'
+ALLOWED_HOSTS = [
+    "agrodatalab-rinn.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
